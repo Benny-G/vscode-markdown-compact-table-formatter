@@ -4,7 +4,7 @@ import { extractTables } from './utils/extract-tables';
 import { formatTable } from './utils/format-table';
 
 function loadConfig(): Config {
-  const config = vscode.workspace.getConfiguration('vscode-markdown-compact-table-formatter');
+  const config = vscode.workspace.getConfiguration('vscode-markdown-table-compactor');
   return {
     enable: config.get<boolean>('enable', true),
     spacePadding: config.get<boolean>('spacePadding', true),
@@ -54,4 +54,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // tslint:disable-next-line: no-empty
-export function deactivate() {}
+export function deactivate() { }

@@ -1,7 +1,7 @@
 {
-  "name": "vscode-markdown-compact-table-formatter",
-  "version": "1.0.0",
-  "displayName": "Markdown Compact Table Formatter",
+  "name": "vscode-markdown-table-compactor",
+  "version": "1.0.1",
+  "displayName": "Markdown Table compactor",
   "description": "Format Markdown tables using compact style compatible with markdownlint/MD060.",
   "scripts": {
     "release": "tsc -p ./ && vsce package",
@@ -12,13 +12,13 @@
   },
   "publisher": "Benny-G",
   "license": "MIT",
-  "homepage": "https://github.com/Benny-G/vscode-markdown-compact-table-formatter/blob/master/README.md",
+  "homepage": "https://github.com/Benny-G/vscode-markdown-table-compactor/blob/master/README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Benny-G/vscode-markdown-compact-table-formatter.git"
+    "url": "https://github.com/Benny-G/vscode-markdown-table-compactor.git"
   },
   "bugs": {
-    "url": "https://github.com/Benny-G/vscode-markdown-compact-table-formatter/issues"
+    "url": "https://github.com/Benny-G/vscode-markdown-table-compactor/issues"
   },
   "keywords": [
     "vscode",
@@ -42,24 +42,24 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Markdown Compact Table Formatter",
+      "title": "Markdown Table Compactor",
       "properties": {
-        "vscode-markdown-compact-table-formatter.enable": {
+        "vscode-markdown-table-compactor.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable or disable the formatter."
         },
-        "vscode-markdown-compact-table-formatter.spacePadding": {
+        "vscode-markdown-table-compactor.spacePadding": {
           "type": "boolean",
           "default": true,
           "description": "Pad columns with a single space. (default: `true`)"
         },
-        "vscode-markdown-compact-table-formatter.keepFirstAndLastPipes": {
+        "vscode-markdown-table-compactor.keepFirstAndLastPipes": {
           "type": "boolean",
           "default": true,
           "description": "Keep first and last pipes `|` in table formatting. (tables are easier to render when pipes are kept)"
         },
-        "vscode-markdown-compact-table-formatter.emptyPlaceholder": {
+        "vscode-markdown-table-compactor.emptyPlaceholder": {
           "type": "string",
           "default": "",
           "description": "Value to insert when a cell is empty. (empty by default, `-` commonly used)"
