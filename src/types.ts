@@ -12,7 +12,7 @@ export interface Config {
    */
   keepFirstAndLastPipes: boolean;
   /**
-   * Value to insert when a cell is empty. (default: `-`)
+   * Value to insert when a cell is empty. (empty by default, `-` commonly used)
    */
   emptyPlaceholder: string;
 }

@@ -61,8 +61,8 @@
         },
         "vscode-markdown-compact-table-formatter.emptyPlaceholder": {
           "type": "string",
-          "default": "-",
-          "description": "Value to insert when a cell is empty. (default: `-`)"
+          "default": "",
+          "description": "Value to insert when a cell is empty. (empty by default, `-` commonly used)"
         }
       }
     }

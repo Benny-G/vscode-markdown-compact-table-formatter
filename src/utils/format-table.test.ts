@@ -6,7 +6,7 @@ describe('formatTable', () => {
     enable: true,
     spacePadding: true,
     keepFirstAndLastPipes: true,
-    emptyPlaceholder: '-',
+    emptyPlaceholder: '',
   };
 
   describe('basic table formatting', () => {
@@ -18,7 +18,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -32,7 +32,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -46,7 +46,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -78,7 +78,7 @@ C1|C2|C3
 `;
       const expected = `
 | H1 | H2 | H3 |
-|----|----|----|
+| -- | -- | -- |
 | C1 | C2 | C3 |
 `.trim();
       expect(formatTable(input, config)).toBe(expected);
@@ -122,7 +122,8 @@ Cell 1|Cell 2|Cell 3
   });
 
   describe('empty cells and placeholder', () => {
-    it('should replace empty cells with placeholder', () => {
+    it('should replace empty cells with placeholder when configured', () => {
+      const config: Config = { ...defaultConfig, emptyPlaceholder: '-' };
       const input = `
 Header 1|Header 2|Header 3
 ---|---|---
@@ -130,10 +131,10 @@ Cell 1||Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | - | Cell 3 |
 `.trim();
-      expect(formatTable(input, defaultConfig)).toBe(expected);
+      expect(formatTable(input, config)).toBe(expected);
     });
 
     it('should use custom empty placeholder', () => {
@@ -145,13 +146,14 @@ Cell 1||Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | N/A | Cell 3 |
 `.trim();
       expect(formatTable(input, config)).toBe(expected);
     });
 
-    it('should handle cells with only whitespace as empty', () => {
+    it('should handle cells with only whitespace as empty when placeholder configured', () => {
+      const config: Config = { ...defaultConfig, emptyPlaceholder: '-' };
       const input = `
 Header 1|Header 2|Header 3
 ---|---|---
@@ -159,14 +161,13 @@ Cell 1|   |Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | - | Cell 3 |
 `.trim();
-      expect(formatTable(input, defaultConfig)).toBe(expected);
+      expect(formatTable(input, config)).toBe(expected);
     });
 
-    it('should not replace empty cells when emptyPlaceholder is empty string', () => {
-      const config: Config = { ...defaultConfig, emptyPlaceholder: '' };
+    it('should leave empty cells empty by default', () => {
       const input = `
 Header 1|Header 2|Header 3
 ---|---|---
@@ -174,10 +175,10 @@ Cell 1||Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 |  | Cell 3 |
 `.trim();
-      expect(formatTable(input, config)).toBe(expected);
+      expect(formatTable(input, defaultConfig)).toBe(expected);
     });
   });
 
@@ -190,7 +191,7 @@ Command|Description
 `;
       const expected = `
 | Command | Description |
-|---------|-------------|
+| ------- | ----------- |
 | \`ls | grep foo\` | List and filter |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -204,7 +205,7 @@ Command|Description
 `;
       const expected = `
 | Command | Description |
-|---------|-------------|
+| ------- | ----------- |
 | \`echo\` and \`cat | grep\` | Multiple commands |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -220,7 +221,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
+| -------- | -------- | -------- |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -234,7 +235,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|:--------:|:--------:|:--------:|
+| :------: | :------: | :------: |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -248,7 +249,7 @@ Cell 1|Cell 2|Cell 3
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|---------:|---------:|---------:|
+| -------: | -------: | -------: |
 | Cell 1 | Cell 2 | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -262,8 +263,22 @@ A|B|C
 `;
       const expected = `
 | Left | Center | Right |
-|------|:------:|------:|
+| ---- | :----: | ----: |
 | A | B | C |
+`.trim();
+      expect(formatTable(input, defaultConfig)).toBe(expected);
+    });
+
+    it('should handle single character headings with mixed alignment', () => {
+      const input = `
+A|B|C
+---|:---:|---:
+1|2|3
+`;
+      const expected = `
+| A | B | C |
+| - | :-: | -: |
+| 1 | 2 | 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -279,9 +294,9 @@ Cell A
 `;
       const expected = `
 | Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
-| Cell 1 | Cell 2 | - |
-| Cell A | - | - |
+| -------- | -------- | -------- |
+| Cell 1 | Cell 2 |  |
+| Cell A |  |  |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -293,8 +308,8 @@ Header 1|Header 2
 Cell 1|Cell 2|Cell 3|Cell 4
 `;
       const expected = `
-| Header 1 | Header 2 | - | - |
-|----------|----------|--|--|
+| Header 1 | Header 2 |  |  |
+| -------- | -------- | - | - |
 | Cell 1 | Cell 2 | Cell 3 | Cell 4 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -310,7 +325,7 @@ Cell
 `;
       const expected = `
 | Header |
-|--------|
+| ------ |
 | Cell |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -324,7 +339,7 @@ A|B
 `;
       const expected = `
 | Very Long Header Name | Short |
-|-----------------------|-------|
+| --------------------- | ----- |
 | A | B |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
@@ -337,9 +352,9 @@ A|B
 | | Value a | Value b |
 `;
       const expected = `
-| - | Test a | Test b |
-|--|--------|--------|
-| - | Value a | Value b |
+|  | Test a | Test b |
+| - | ------ | ------ |
+|  | Value a | Value b |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -375,7 +390,7 @@ Bob|35|Chicago
 `;
       const expected = `
 | Name | Age | City |
-|------|-----|------|
+| ---- | --- | ---- |
 | John | 25 | NYC |
 | Jane | 30 | LA |
 | Bob | 35 | Chicago |
@@ -392,10 +407,12 @@ C|Also Very Long
 `;
       const expected = `
 | Short | H2 |
-|-------|----|\n| Very Long Content | B |
+| ----- | -- |
+| Very Long Content | B |
 | C | Also Very Long |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
   });
 });
+

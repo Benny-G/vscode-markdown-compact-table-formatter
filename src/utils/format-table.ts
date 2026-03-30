@@ -12,7 +12,8 @@ export function formatTable(str: string, cog: Config): string {
         }
         const needSpacePadding = cog.keepFirstAndLastPipes && cog.spacePadding;
         if (rowIndex === 1) {
-          return padHeaderSeparatorString(cell, headerMaxLength[columnIndex] + (needSpacePadding ? 2 : 0));
+          const separator = padHeaderSeparatorString(cell, headerMaxLength[columnIndex]);
+          return needSpacePadding ? ` ${separator} ` : separator;
         }
         if (cog.emptyPlaceholder && cell.trim().length === 0) {
           cell = cog.emptyPlaceholder;
