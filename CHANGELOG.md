@@ -6,6 +6,7 @@
 - Added unit testing.
 - Clarify descriptions of functionality based on new target of matching markdownlint/MD060.
 - Empty placeholder empty by default.
+- Headings are always at least as wide as the separator row.
 
 ## 1.0.0
 

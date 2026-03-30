@@ -3,18 +3,37 @@ import { Config } from '../types';
 export function formatTable(str: string, cog: Config): string {
   let table = splitStringToTable(str);
   table = fillInMissingColumns(table);
-  const headerMaxLength: number[] = [];
+  const columnWidth: number[] = [];
+
+  // Calculate column widths: max of header length and minimum separator length
+  if (table.length > 0) {
+    table[0].forEach((headerCell, columnIndex) => {
+      const headerLen = headerCell.length;
+      // Get minimum separator length based on alignment
+      const separatorCell = table.length > 1 ? table[1][columnIndex] : '';
+      const minSeparatorLen = getMinimumSeparatorLength(separatorCell);
+      columnWidth[columnIndex] = Math.max(headerLen, minSeparatorLen);
+    });
+  }
+
   return table
     .map((row: string[], rowIndex: number) => {
       const orgRows = row.map((cell, columnIndex) => {
-        if (rowIndex === 0) {
-          headerMaxLength[columnIndex] = cell.length;
-        }
         const needSpacePadding = cog.keepFirstAndLastPipes && cog.spacePadding;
+
+        // Separator row
         if (rowIndex === 1) {
-          const separator = padHeaderSeparatorString(cell, headerMaxLength[columnIndex]);
+          const separator = padHeaderSeparatorString(cell, columnWidth[columnIndex]);
           return needSpacePadding ? ` ${separator} ` : separator;
         }
+
+        // Header row - pad to column width
+        if (rowIndex === 0) {
+          const paddedCell = cell.padEnd(columnWidth[columnIndex], ' ');
+          return needSpacePadding ? ` ${paddedCell} ` : paddedCell;
+        }
+
+        // Data rows - no padding, just handle empty placeholder
         if (cog.emptyPlaceholder && cell.trim().length === 0) {
           cell = cog.emptyPlaceholder;
         }
@@ -83,6 +102,8 @@ function padHeaderSeparatorString(str: string, len: number): string {
       return ':' + '-'.repeat(Math.max(1, len - 2)) + ':';
     case 'r':
       return '-'.repeat(Math.max(1, len - 1)) + ':';
+    case 'l-explicit':
+      return ':' + '-'.repeat(Math.max(1, len - 1));
     case 'l':
     default:
       return '-'.repeat(Math.max(1, len));
@@ -98,5 +119,26 @@ function getAlignment(str: string): string {
     return 'r';
   }
 
+  // Check for explicit left alignment (:- or :---)
+  if (str.startsWith(':')) {
+    return 'l-explicit';
+  }
+
   return 'l';
 }
+
+function getMinimumSeparatorLength(separatorCell: string): number {
+  const alignment = getAlignment(separatorCell);
+  switch (alignment) {
+    case 'c':
+      return 3; // :-:
+    case 'r':
+      return 2; // -:
+    case 'l-explicit':
+      return 2; // :-
+    case 'l':
+    default:
+      return 1; // -
+  }
+}
+

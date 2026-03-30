@@ -271,14 +271,14 @@ A|B|C
 
     it('should handle single character headings with mixed alignment', () => {
       const input = `
-A|B|C
----|:---:|---:
-1|2|3
+A|B|C|D
+---|:---:|---:|:---
+1|2|3|4
 `;
       const expected = `
-| A | B | C |
-| - | :-: | -: |
-| 1 | 2 | 3 |
+| A | B   | C  | D  |
+| - | :-: | -: | :- |
+| 1 | 2 | 3 | 4 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -308,7 +308,7 @@ Header 1|Header 2
 Cell 1|Cell 2|Cell 3|Cell 4
 `;
       const expected = `
-| Header 1 | Header 2 |  |  |
+| Header 1 | Header 2 |   |   |
 | -------- | -------- | - | - |
 | Cell 1 | Cell 2 | Cell 3 | Cell 4 |
 `.trim();
@@ -352,7 +352,7 @@ A|B
 | | Value a | Value b |
 `;
       const expected = `
-|  | Test a | Test b |
+|   | Test a | Test b |
 | - | ------ | ------ |
 |  | Value a | Value b |
 `.trim();
