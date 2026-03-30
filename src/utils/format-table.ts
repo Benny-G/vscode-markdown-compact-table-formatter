@@ -5,14 +5,10 @@ export function formatTable(str: string, cog: Config): string {
   table = fillInMissingColumns(table);
   const columnWidth: number[] = [];
 
-  // Calculate column widths: max of header length and minimum separator length
+  // Calculate column widths based on header length (minimum 1 for empty headers)
   if (table.length > 0) {
     table[0].forEach((headerCell, columnIndex) => {
-      const headerLen = headerCell.length;
-      // Get minimum separator length based on alignment
-      const separatorCell = table.length > 1 ? table[1][columnIndex] : '';
-      const minSeparatorLen = getMinimumSeparatorLength(separatorCell);
-      columnWidth[columnIndex] = Math.max(headerLen, minSeparatorLen);
+      columnWidth[columnIndex] = Math.max(1, headerCell.length);
     });
   }
 
@@ -21,23 +17,21 @@ export function formatTable(str: string, cog: Config): string {
       const orgRows = row.map((cell, columnIndex) => {
         const needSpacePadding = cog.keepFirstAndLastPipes && cog.spacePadding;
 
-        // Separator row
+        // Separator row - use calculated column width
         if (rowIndex === 1) {
           const separator = padHeaderSeparatorString(cell, columnWidth[columnIndex]);
           return needSpacePadding ? ` ${separator} ` : separator;
         }
 
-        // Header row - pad to column width
-        if (rowIndex === 0) {
-          const paddedCell = cell.padEnd(columnWidth[columnIndex], ' ');
-          return needSpacePadding ? ` ${paddedCell} ` : paddedCell;
-        }
-
-        // Data rows - no padding, just handle empty placeholder
+        // Header and data rows - no padding
         if (cog.emptyPlaceholder && cell.trim().length === 0) {
           cell = cog.emptyPlaceholder;
         }
-        return needSpacePadding ? ` ${cell} ` : cell;
+        // For empty cells with space padding, use single space
+        if (needSpacePadding) {
+          return cell === '' ? ' ' : ` ${cell} `;
+        }
+        return cell;
       });
       const rowStr = orgRows.join('|');
       return cog.keepFirstAndLastPipes ? `|${rowStr}|` : rowStr;
@@ -53,7 +47,7 @@ function splitStringToTable(str: string): string[][] {
       // trim space and "|", but respect empty first column
       // E.g. "| | Test a | Test b |"
       //   => "| Test a | Test b"
-      .map((row) => row.replace(/^(\s*\|\s*|\s+)/, '').replace(/[\|\s]+$/, ''))
+      .map((row) => row.replace(/^(\s*\|\s*|\s+)/, '').replace(/[|\s]+$/, ''))
       // Split rows into columns
       .map((row) => {
         let inCode = false;
@@ -127,18 +121,5 @@ function getAlignment(str: string): string {
   return 'l';
 }
 
-function getMinimumSeparatorLength(separatorCell: string): number {
-  const alignment = getAlignment(separatorCell);
-  switch (alignment) {
-    case 'c':
-      return 3; // :-:
-    case 'r':
-      return 2; // -:
-    case 'l-explicit':
-      return 2; // :-
-    case 'l':
-    default:
-      return 1; // -
-  }
-}
+
 

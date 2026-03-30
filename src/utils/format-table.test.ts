@@ -176,7 +176,7 @@ Cell 1||Cell 3
       const expected = `
 | Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
-| Cell 1 |  | Cell 3 |
+| Cell 1 | | Cell 3 |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -276,7 +276,7 @@ A|B|C|D
 1|2|3|4
 `;
       const expected = `
-| A | B   | C  | D  |
+| A | B | C | D |
 | - | :-: | -: | :- |
 | 1 | 2 | 3 | 4 |
 `.trim();
@@ -295,8 +295,8 @@ Cell A
       const expected = `
 | Header 1 | Header 2 | Header 3 |
 | -------- | -------- | -------- |
-| Cell 1 | Cell 2 |  |
-| Cell A |  |  |
+| Cell 1 | Cell 2 | |
+| Cell A | | |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });
@@ -308,7 +308,7 @@ Header 1|Header 2
 Cell 1|Cell 2|Cell 3|Cell 4
 `;
       const expected = `
-| Header 1 | Header 2 |   |   |
+| Header 1 | Header 2 | | |
 | -------- | -------- | - | - |
 | Cell 1 | Cell 2 | Cell 3 | Cell 4 |
 `.trim();
@@ -352,9 +352,9 @@ A|B
 | | Value a | Value b |
 `;
       const expected = `
-|   | Test a | Test b |
+| | Test a | Test b |
 | - | ------ | ------ |
-|  | Value a | Value b |
+| | Value a | Value b |
 `.trim();
       expect(formatTable(input, defaultConfig)).toBe(expected);
     });

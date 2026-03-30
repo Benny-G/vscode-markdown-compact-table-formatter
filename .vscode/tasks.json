@@ -1,27 +1,39 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "type": "shell",
   "tasks": [
     {
-      "label": "magic",
-      "command": "npm run magic:watch",
+      "label": "Build Package (lint, compile, build)",
+      "command": "npm run release",
       "group": {
-        "kind": "build",
+        "kind":"build",
         "isDefault": true
       },
       "presentation": {
-        "panel": "dedicated",
-        "reveal": "never"
+        "panel":"dedicated",
+        "reveal": "always",
+        "close": false,
+        "clear": true,
+        "showReuseMessage": true
       },
       "problemMatcher": ["$tsc-watch"]
     },
     {
-      "label": "test",
+      "label": "Run Tests",
       "command": "npm run test",
       "isBackground": false,
-      "promptOnClose": false
+      "promptOnClose": false,
+      "group": {
+        "kind":"test",
+        "isDefault": true
+      },
+      "presentation": {
+        "panel":"dedicated",
+        "reveal": "always",
+        "close": false,
+        "clear": true,
+        "showReuseMessage": true
+      },
     }
   ]
 }

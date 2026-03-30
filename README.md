@@ -19,7 +19,11 @@ It also reduces diff sizes, but that's more of a bonus.
 
 Runs as part of VS Code `Format Document` and `Format Selection`.
 
-![feature X](animation.gif)
+![image-Format-Document.png](image-Format-Document.png)
+
+Great success!
+
+![image-Table-Formatted.png](image-Table-Formatted.png)
 
 ### Settings
 
@@ -40,44 +44,34 @@ See: [LICENSE](./LICENSE)
 
 You can build and install locally while this is under development.
 
+1. Clone <https://github.com/Benny-G/vscode-markdown-table-compactor> and run VS Code.
+
 1. Install @vscode/vsce if you don't already have it.
 
    ```shell
    npm install -g @vscode/vsce
    ```
 
-2. Compile the code.
+1. Lint, compile the code, build the package.
 
    ```shell
-   tsc -p .
+   npm run release # This will lint, compile and package
    ```
 
-3. Build the package.
-
-   ```shell
-   vsce package
-   ```
-
-   Now you have a `vsix` file! _(should be called something like: `vscode-markdown-table-compactor-1.0.0.vsix`)_
+   Now you have a `vsix` file! _(should be called something like: `vscode-markdown-table-compactor-1.0.1.vsix`)_
 
    > [!NOTE]
    > Version is taken from [package.json](package.json). Don't forget to update the version number and note major changes in [CHANGELOG.md](CHANGELOG.md) as you go.
 
-4. To install the package in VS Code so it's available every time you run VS Code:
+1. To install the package in VS Code so it's available every time you run VS Code:
 
    ```shell
-   code --install-extension vscode-markdown-table-compactor-1.0.0.vsix
+   code --install-extension vscode-markdown-table-compactor-1.0.1.vsix
    ```
 
    > [!TIP]
    > Use the -force parameter to overwrite a previously installed version of the package.
    >
    > ```shell
-   > code --install-extension vscode-markdown-compact-table-formatter-1.0.0.vsix --force
+   > code --install-extension vscode-markdown-table-compactor-1.0.1.vsix --force
    > ```
-
-Apparently we should be able to building using the following as well, but maybe version updates are needed first.
-
-```shell
-npm run release # This will compile and package
-```
