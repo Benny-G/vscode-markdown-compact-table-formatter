@@ -1,18 +1,18 @@
 export interface Config {
   /**
-   * Enable/disable Markdown Inline Table Formatter.
+   * Enable or disable the formatter.
    */
   enable: boolean;
   /**
-   * How many spaces between left and right of each column content.
+   * Pad columns with a single space. (default: `true`)
    */
   spacePadding: boolean;
   /**
-   * Keep first and last pipes `|` in table formatting. Tables are easier to format when pipes are kept.
+   * Keep first and last pipes `|` in table formatting. (tables are easier to render when pipes are kept)
    */
   keepFirstAndLastPipes: boolean;
   /**
-   * The default data when the cell is empty, default: `-`
+   * Value to insert when a cell is empty. (default: `-`)
    */
   emptyPlaceholder: string;
 }
